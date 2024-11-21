@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../middlewares/userAuth')
+const { findAll, createUser } = require('../useCases/users-useCases')
 const Users = require('../models/users-models')
 
 router.post('/login', async (req, res) => {
@@ -25,22 +26,20 @@ router.post('/login', async (req, res) => {
   router.post('/', async (req, res) => {
     try {
       let user = req.body
-      user.Password = await Users.encryptPassword(user.Password)
-      const newUser = await Users.create(user)
-      await newUser.save()
-      res.status(201).send({ message:'Success', data: user })
+      user = await createUser(user);
+      res.status(201).send({ status:'OK', data: user, error: null })
     } catch (error) {
         console.log(error)
-      res.status(400).send({ message: error })
+      res.status(400).send({ status:'Error', data: null, error: error })
     }
   })
   
   router.get('/', async (req, res) => {
     try {
-      const users = await Users.find()
-      res.status(200).send({ message: users })
+      const users = await findAll()
+      res.status(200).send({ status: 'OK', data: users, error: null })
     } catch (error) {
-      res.status(400).send({ message: error })
+      res.status(400).send({ status: 'Error', data: null, error: error })
     }
   })
 
