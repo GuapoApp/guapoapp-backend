@@ -1,4 +1,4 @@
-const Professionals = require('../models/profesionals-models')
+const Professionals = require('../useCases/professional-useCases')
 const createError = require("http-errors")
 const express = require('express')
 const router = express.Router()
@@ -30,7 +30,7 @@ router.post('/', async (req,res)=>{
 // Get all professionals
 router.get('/', async (req,res)=>{
     try {
-        const professionals = await Professionals.find({})
+        const professionals = await Professionals.getAll({})
         res.json({
             success:true,
             message:"Get all professionals",
@@ -51,7 +51,7 @@ router.get('/', async (req,res)=>{
 router.get('/:id', async (req,res)=>{
     try {
         const id = req.params.id;
-        const professional = await Professionals.findById(id)
+        const professional = await Professionals.getById(id)
         if(!professional){
             throw createError(404, "Professional not found");
         }
@@ -75,11 +75,11 @@ router.patch('/:id', async (req,res)=>{
     try {
         const id = req.params.id;
         const profesionalsData = req.body;
-        const profesionalsFound = await Professionals.findById(id);
+        const profesionalsFound = await Professionals.getById(id);
         if(!profesionalsFound){
             throw createError(404, "Professional not found");
             }
-            professionalUpdate = await Professionals.findByIdAndUpdate(id, profesionalsData, {new:true});
+            const professionalUpdate = await Professionals.updateById(id, profesionalsData);
             res.json({
                 success:true,
                 message: "Update one professional",
