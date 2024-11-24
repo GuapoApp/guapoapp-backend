@@ -14,6 +14,16 @@ const createConsultant = async (consultant) => {
   }
 }
 
+const findAll = async () => {
+  return await Consultants.find().populate('User').exec()
+}
+
+const findConsultant = async (id) => {
+  return await Consultants.findById(id).populate('User').exec()
+}
+
 module.exports = {
-  createConsultant
+  createConsultant,
+  findAll,
+  findConsultant
 }
