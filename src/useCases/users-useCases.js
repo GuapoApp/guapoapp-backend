@@ -11,10 +11,6 @@ const createUser = async (user) => {
   }
 }
 
-const findAll = async () => {
-  return await Users.find()
-}
-
 const login = async (email, password, headers) => {
   try {
     const user = await Users.findOne({ email: email })
@@ -28,10 +24,33 @@ const login = async (email, password, headers) => {
       })
       authorization = `Bearer ${token}`
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const findAll = async () => {
+  return await Users.find()
+}
+
+const findUser = async (id) => {
+  return await Users.findById(id)
+}
+
+const updateUser = async (id, data) => {
+  try {
+    const updatedUser = await Users.findByIdAndUpdate(id, data, {
+      returnOriginal: false
+    })
+    return updatedUser
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 module.exports = {
   findAll,
-  createUser
+  createUser,
+  updateUser,
+  findUser
 }
