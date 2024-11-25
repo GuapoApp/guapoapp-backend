@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
     },
     Birth_Date: {
       type: Date,
-      required: false
+      required: true
     },
     Role: {
       type: String,
@@ -45,6 +45,15 @@ const userSchema = new mongoose.Schema(
     }
   }
 )
+
+userSchema.methods.toJSON = function () {
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.Password
+
+  return userObject
+}
 
 const userModel = mongoose.model('Users', userSchema)
 
