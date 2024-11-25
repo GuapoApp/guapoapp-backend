@@ -11,7 +11,7 @@ app.use(express.json())
 
 app.use(cors())
 
-app.use('/user', user)
+app.use('/user', user);
 app.use('/professional', professional)
 app.use('/consultant', consultant)
 
