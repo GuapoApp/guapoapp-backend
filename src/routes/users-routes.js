@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
       res.status(401).send({
         status: 'Error',
         data: null,
-        error: 'Invalidad Password'
+        error: 'Invalidad Credentials'
       })
     } else {
       let { authorization } = req.headers
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
         Role: user.Role
       })
       authorization = `Bearer ${token}`
-      res.status(201).send({
+      res.status(200).send({
         status: 'OK',
         data: { token: token },
         error: null
