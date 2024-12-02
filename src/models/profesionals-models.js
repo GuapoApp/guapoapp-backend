@@ -14,7 +14,7 @@ const professionalSchema = new mongoose.Schema({
     required: true
   },
   UserId: {
-    type: mongoose.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Users'
   }
 })

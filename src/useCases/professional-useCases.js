@@ -8,8 +8,8 @@ async function create(data){
     return newProfessional
 }
 // Get all professional
-async function getAll(data){
-    const allProfessionals = await Professional.find(data)
+async function getAll(){
+    const allProfessionals = await Professional.find().populate("professionals").exec()
     return allProfessionals
 }
 // Get professional by id
