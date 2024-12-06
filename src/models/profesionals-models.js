@@ -1,21 +1,14 @@
 const mongoose = require('mongoose')
 
 const professionalSchema = new mongoose.Schema({
+  User: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Users',
+    required: [true, 'User is required']
+  },
   About: {
     type: String,
     required: true
-  },
-  Consultants: {
-    type: Array,
-    required: true
-  },
-  Sessions: {
-    type: Array,
-    required: true
-  },
-  UserId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Users'
   }
 })
 
