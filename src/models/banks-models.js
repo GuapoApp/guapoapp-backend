@@ -12,6 +12,6 @@ const bankSchema = new mongoose.Schema({
   }
 })
 
-const bankModel = mongoose.model('Bank', bankSchema)
+const bankModel = mongoose.model('Banks', bankSchema)
 
 module.exports = bankModel

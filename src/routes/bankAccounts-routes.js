@@ -8,7 +8,7 @@ const {
 
 router.post('/', async (req, res) => {
   try {
-    const bankAccount = req.body
+    let bankAccount = req.body
     bankAccount = await createBankAccount(bankAccount)
     res.status(201).send({ status: 'OK', data: bankAccount, error: null })
   } catch (error) {
@@ -22,6 +22,7 @@ router.get('/', async (req, res) => {
     const bankAccounts = await findAll()
     res.status(200).send({ status: 'OK', data: bankAccounts, error: null })
   } catch (error) {
+    console.log(error)
     res.status(400).send({ status: 'Error', data: null, error: error })
   }
 })

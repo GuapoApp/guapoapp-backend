@@ -8,7 +8,8 @@ const bankAccountSchema = new mongoose.Schema({
   },
   Clabe_Account: {
     type: String,
-    required: true
+    required: true,
+    unique: [true, 'Clabe Account must be unique']
   },
   Bank: {
     type: mongoose.Types.ObjectId,
@@ -19,5 +20,5 @@ const bankAccountSchema = new mongoose.Schema({
   }
 })
 
-const bankAccountModel = mongoose.model('BankAccount', bankAccountSchema)
+const bankAccountModel = mongoose.model('BankAccounts', bankAccountSchema)
 module.exports = bankAccountModel
