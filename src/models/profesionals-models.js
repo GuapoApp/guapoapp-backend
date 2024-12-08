@@ -13,4 +13,4 @@ const professionalSchema = new mongoose.Schema({
 })
 
 const professionalModel = mongoose.model('Professional', professionalSchema)
-module.exports = professionalModel //export the model to use in other files.  //export
+module.exports = professionalModel
