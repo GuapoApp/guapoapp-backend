@@ -30,7 +30,8 @@ router.post('/login', async (req, res) => {
         _id: user._id,
         Name: user.Name,
         Email: user.Email,
-        Role: user.Role
+        Role: user.Role,
+        Profile_Picture: user.Profile_Picture
       })
       authorization = `Bearer ${token}`
       res.status(201).send({
