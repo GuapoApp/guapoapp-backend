@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
       res.status(401).send({
         status: 'Error',
         data: null,
-        error: 'Invalidad Password'
+        error: 'Invalidad Credentials'
       })
     } else {
       let { authorization } = req.headers
@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
         Profile_Picture: user.Profile_Picture
       })
       authorization = `Bearer ${token}`
-      res.status(201).send({
+      res.status(200).send({
         status: 'OK',
         data: { token: token },
         error: null
@@ -52,8 +52,18 @@ router.post('/', async (req, res) => {
     user = await createUser(user)
     res.status(201).send({ status: 'OK', data: user, error: null })
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ status: 'Error', data: null, error: error })
+    console.log('Error ==>', error.errors?.Birth_Date.properties.type)
+
+    let errorInfo = error
+
+    if (error.errorResponse?.code === 11000) {
+      errorInfo = {
+        code: error.errorResponse.code,
+        message: 'Email already exists'
+      }
+    }
+
+    res.status(400).send({ status: 'Error', data: null, error: errorInfo })
   }
 })
 
@@ -85,7 +95,7 @@ router.put('/:id', validUser, async (req, res) => {
       res.status(200).send({ status: 'OK', data: updatedUser, error: null })
     } else {
       res
-        .status(401)
+        .status(403)
         .send({ message: 'Unauthorized User', data: null, error: null })
     }
   } catch (error) {

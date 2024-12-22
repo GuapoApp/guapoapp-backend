@@ -13,8 +13,18 @@ router.post('/', async (req, res) => {
     consultant = await createConsultant(consultant)
     res.status(201).send({ status: 'OK', data: consultant, error: null })
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ status: 'Error', data: null, error: error })
+    console.log('Error ==>', error.errors?.Birth_Date.properties.type)
+
+    let errorInfo = error
+
+    if (error.errorResponse?.code === 11000) {
+      errorInfo = {
+        code: error.errorResponse.code,
+        message: 'Email already exists'
+      }
+    }
+
+    res.status(400).send({ status: 'Error', data: null, error: errorInfo })
   }
 })
 

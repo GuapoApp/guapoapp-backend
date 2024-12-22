@@ -11,6 +11,7 @@ const createConsultant = async (consultant) => {
     return newConsultant
   } catch (error) {
     console.log(error)
+    throw error
   }
 }
 
