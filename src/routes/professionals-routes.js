@@ -5,37 +5,46 @@ const router = express.Router()
 
 // -----------> CRUD operations<-----------
 
-// Create new mentor
+// Create new professional
 router.post('/', async (req, res) => {
   try {
     const professionalData = req.body
     const newProfessional = await Professionals.create(professionalData)
     await newProfessional.save()
-    
-    res.status(201).send({status:"OK", data:newProfessional, error:null})
-    
+
+    res.status(201).send({ status: 'OK', data: newProfessional, error: null })
   } catch (error) {
-    res.status(400).send({status:"Error", data:null, error:error })
+    console.log('Error ==>', error.errors?.Birth_Date.properties.type)
+
+    let errorInfo = error
+
+    if (error.errorResponse?.code === 11000) {
+      errorInfo = {
+        code: error.errorResponse.code,
+        message: 'Email already exists'
+      }
+    }
+
+    res.status(400).send({ status: 'Error', data: null, error: errorInfo })
   }
 })
 
 // Get all professionals
-router.get('/', async (req,res)=>{
-    try {
-        const professionals = await Professionals.getAll({})
-        res.json({
-            success:true,
-            message:"Get all professionals",
-            data:{professionals}
-        })
-        
-    } catch (error) {
-        res.status(400),
-        res.json({
-            success:false,
-            message:error.message,
-        })   
-    }
+router.get('/', async (req, res) => {
+  try {
+    const professionals = await Professionals.getAll({})
+    res.json({
+      success: true,
+      message: 'Get all professionals',
+      data: { professionals }
+    })
+  } catch (error) {
+    res.status(400),
+      res.json({
+        success: false,
+        message: error.message
+      })
+  }
 })
 
 // Get one professional
@@ -63,28 +72,30 @@ router.get('/:id', async (req, res) => {
 
 // Update one professional
 
-router.patch('/:id', async (req,res)=>{
-    try {
-        const id = req.params.id;
-        const profesionalsData = req.body;
-        const profesionalsFound = await Professionals.getById(id);
-        if(!profesionalsFound){
-            throw createError(404, "Professional not found");
-            }
-            const professionalUpdate = await Professionals.updateById(id, profesionalsData);
-            res.json({
-                success:true,
-                message: "Update one professional",
-                data:{professionalUpdate}
-            })
-                
-    } catch (error) {
-        res.status(400)
-        res.json({
-            success:false,
-            message:error.message,            
-        });
+router.patch('/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const profesionalsData = req.body
+    const profesionalsFound = await Professionals.getById(id)
+    if (!profesionalsFound) {
+      throw createError(404, 'Professional not found')
     }
+    const professionalUpdate = await Professionals.updateById(
+      id,
+      profesionalsData
+    )
+    res.json({
+      success: true,
+      message: 'Update one professional',
+      data: { professionalUpdate }
+    })
+  } catch (error) {
+    res.status(400)
+    res.json({
+      success: false,
+      message: error.message
+    })
+  }
 })
 
 module.exports = router

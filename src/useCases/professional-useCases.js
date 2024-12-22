@@ -13,6 +13,7 @@ async function create(professional) {
     return newProfessional
   } catch (error) {
     console.log(error)
+    throw error
   }
 }
 // Get all professional
