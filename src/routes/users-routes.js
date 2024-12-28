@@ -126,19 +126,8 @@ router.get('/:id', validUser, async (req, res) => {
     professionalId = await getProfessionalId(userId)
     consultantId = await getConsultantId(userId)
 
-    // if (professionalId.length > 0) {
-    //   professionalId = professionalId[0]._id
-    // }
-
     professionalId = professionalId.length > 0 ? professionalId[0]._id : null
     consultantId = consultantId.length > 0 ? consultantId[0]._id : null
-
-    // if (consultantId.length > 0) {
-    //   consultantId = consultantId[0]._id
-    // }
-
-    console.log('Professional ID ==>', professionalId)
-    console.log('Consultant ID ==>', consultantId)
 
     const user = {
       ...foundUser.toObject(),

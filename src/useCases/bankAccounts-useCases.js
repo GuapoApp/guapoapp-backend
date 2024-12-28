@@ -10,19 +10,28 @@ const createBankAccount = async (bankAccount) => {
     await newBankAccount.save()
     return newBankAccount
   } catch (error) {
-    console.log(error)
+    // console.log(error)
+    throw error
   }
 }
 
 const findAll = async () => {
-  return await BankAccounts.find().populate('User').populate('Bank').exec()
+  try {
+    return await BankAccounts.find().populate('User').populate('Bank').exec()
+  } catch (error) {
+    throw error
+  }
 }
 
 const findBankAccount = async (id) => {
-  return await BankAccounts.findById(id)
-    .populate('User')
-    .populate('Bank')
-    .exec()
+  try {
+    return await BankAccounts.findById(id)
+      .populate('User')
+      .populate('Bank')
+      .exec()
+  } catch {
+    throw error
+  }
 }
 
 module.exports = {

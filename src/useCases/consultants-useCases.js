@@ -10,17 +10,25 @@ const createConsultant = async (consultant) => {
     newConsultant.User = user
     return newConsultant
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     throw error
   }
 }
 
 const findAll = async () => {
-  return await Consultants.find().populate('User').exec()
+  try {
+    return await Consultants.find().populate('User').exec()
+  } catch (error) {
+    throw error
+  }
 }
 
 const findConsultant = async (id) => {
-  return await Consultants.findById(id).populate('User').exec()
+  try {
+    return await Consultants.findById(id).populate('User').exec()
+  } catch (error) {
+    throw error
+  }
 }
 
 const getConsultantId = async (userId) => {
@@ -39,7 +47,8 @@ const updateConsultant = async (id, data) => {
     })
     return updatedConsultant
   } catch (error) {
-    console.log(error)
+    // console.log(error)
+    throw error
   }
 }
 

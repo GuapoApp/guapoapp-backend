@@ -1,30 +1,48 @@
-const Reviews= require("../models/reviews-models")
+const Reviews = require('../models/reviews-models')
 // Create Reviews
 
-async function create(data){
+async function create(data) {
+  try {
     const newReviews = await Reviews.create(data)
     return newReviews
+  } catch (error) {
+    throw error
+  }
 }
 // Get all Reviews
-async function getAll(){
-    const allReviewss = await Reviews.find().populate("Consultants")
-    return allReviewss
+async function getAll() {
+  try {
+    const allReviews = await Reviews.find().populate('Consultants')
+    return allReviews
+  } catch (error) {
+    throw error
+  }
 }
 // Get Reviews by id
-async function getById(id){
-    const idReviews = await Reviews.findById(id).populate("Consultants")
+async function getById(id) {
+  try {
+    const idReviews = await Reviews.findById(id).populate('Consultants')
     return idReviews
+  } catch (error) {
+    throw error
+  }
 }
 // Update Reviews
 
-async function updateById(id, newData){
-    const updatedReviews = await Reviews.findByIdAndUpdate(id, newData, {new: true})
+async function updateById(id, newData) {
+  try {
+    const updatedReviews = await Reviews.findByIdAndUpdate(id, newData, {
+      new: true
+    })
     return updatedReviews
+  } catch (error) {
+    throw error
+  }
 }
 
 module.exports = {
-    create,
-    getAll,
-    getById,
-    updateById,
+  create,
+  getAll,
+  getById,
+  updateById
 }

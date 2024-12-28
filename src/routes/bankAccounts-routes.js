@@ -10,7 +10,11 @@ router.post('/', async (req, res) => {
   try {
     let bankAccount = req.body
     bankAccount = await createBankAccount(bankAccount)
-    res.status(201).send({ status: 'OK', data: bankAccount, error: null })
+    res.status(201).send({
+      status: 'Bank Account created',
+      data: bankAccount,
+      error: null
+    })
   } catch (error) {
     console.log(error)
     res.status(400).send({ status: 'Error', data: null, error: error })

@@ -7,7 +7,7 @@ const createUser = async (user) => {
     await newUser.save()
     return newUser
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     throw error
   }
 }
@@ -26,16 +26,25 @@ const login = async (email, password, headers) => {
       authorization = `Bearer ${token}`
     }
   } catch (error) {
-    console.log(error)
+    // console.log(error)
+    throw error
   }
 }
 
 const findAll = async () => {
-  return await Users.find()
+  try {
+    return await Users.find()
+  } catch (error) {
+    throw error
+  }
 }
 
 const findUser = async (id) => {
-  return await Users.findById(id)
+  try {
+    return await Users.findById(id)
+  } catch (error) {
+    throw error
+  }
 }
 
 const updateUser = async (id, data) => {
@@ -45,7 +54,8 @@ const updateUser = async (id, data) => {
     })
     return updatedUser
   } catch (error) {
-    console.log(error)
+    // console.log(error)
+    throw error
   }
 }
 
