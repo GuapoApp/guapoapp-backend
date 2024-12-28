@@ -26,6 +26,17 @@ async function getById(id) {
   const idProfessional = await Professional.findById(id).populate('User').exec()
   return idProfessional
 }
+
+const getProfessionalId = async (userId) => {
+  try {
+    const professionalId = await Professional.find({ User: userId }).select(
+      '_id'
+    )
+    return professionalId
+  } catch (error) {
+    throw error
+  }
+}
 // Update professional
 
 async function updateById(id, newData) {
@@ -41,5 +52,6 @@ module.exports = {
   create,
   getAll,
   getById,
+  getProfessionalId,
   updateById
 }

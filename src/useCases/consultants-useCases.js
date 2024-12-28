@@ -23,6 +23,15 @@ const findConsultant = async (id) => {
   return await Consultants.findById(id).populate('User').exec()
 }
 
+const getConsultantId = async (userId) => {
+  try {
+    const consultantId = await Consultants.find({ User: userId }).select('_id')
+    return consultantId
+  } catch (error) {
+    throw error
+  }
+}
+
 const updateConsultant = async (id, data) => {
   try {
     const updatedConsultant = await Consultants.findByIdAndUpdate(id, data, {
@@ -38,5 +47,6 @@ module.exports = {
   createConsultant,
   findAll,
   findConsultant,
+  getConsultantId,
   updateConsultant
 }
