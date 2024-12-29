@@ -12,34 +12,60 @@ async function create(professional) {
     newProfessional.User = user
     return newProfessional
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     throw error
   }
 }
 // Get all professional
 async function getAll() {
-  const allProfessionals = await Professional.find().populate('User').exec()
-  return allProfessionals
+  try {
+    const allProfessionals = await Professional.find().populate('User').exec()
+    return allProfessionals
+  } catch (error) {
+    throw error
+  }
 }
 // Get professional by id
 async function getById(id) {
-  const idProfessional = await Professional.findById(id).populate('User').exec()
-  return idProfessional
+  try {
+    const idProfessional = await Professional.findById(id)
+      .populate('User')
+      .exec()
+    return idProfessional
+  } catch (error) {
+    throw error
+  }
+}
+
+const getProfessionalId = async (userId) => {
+  try {
+    const professionalId = await Professional.find({ User: userId }).select(
+      '_id'
+    )
+    return professionalId
+  } catch (error) {
+    throw error
+  }
 }
 // Update professional
 
 async function updateById(id, newData) {
-  const updatedProfessional = await Professional.findByIdAndUpdate(
-    id,
-    newData,
-    { new: true }
-  )
-  return updatedProfessional
+  try {
+    const updatedProfessional = await Professional.findByIdAndUpdate(
+      id,
+      newData,
+      { new: true }
+    )
+    return updatedProfessional
+  } catch (error) {
+    throw error
+  }
 }
 
 module.exports = {
   create,
   getAll,
   getById,
+  getProfessionalId,
   updateById
 }

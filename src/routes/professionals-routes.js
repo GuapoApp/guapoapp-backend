@@ -12,12 +12,17 @@ router.post('/', async (req, res) => {
     const newProfessional = await Professionals.create(professionalData)
     await newProfessional.save()
 
-    res.status(201).send({ status: 'OK', data: newProfessional, error: null })
+    res.status(201).send({
+      status: 'Professional created',
+      data: newProfessional,
+      error: null
+    })
   } catch (error) {
-    console.log('Error ==>', error.errors?.Birth_Date.properties.type)
+    // console.log('Error ==>', error.errors?.Birth_Date.properties.type)
 
     let errorInfo = error
 
+    // Duplicate Email Error
     if (error.errorResponse?.code === 11000) {
       errorInfo = {
         code: error.errorResponse.code,
@@ -25,7 +30,13 @@ router.post('/', async (req, res) => {
       }
     }
 
-    res.status(400).send({ status: 'Error', data: null, error: errorInfo })
+    res.status(400).send({
+      status: 'Error in Post Professional',
+      data: null,
+      error: {
+        error_message: errorInfo
+      }
+    })
   }
 })
 
@@ -33,17 +44,21 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const professionals = await Professionals.getAll({})
-    res.json({
-      success: true,
-      message: 'Get all professionals',
-      data: { professionals }
+    res.status(200).send({
+      status: 'Professionals Found',
+      data: {
+        professionals
+      },
+      error: null
     })
   } catch (error) {
-    res.status(400),
-      res.json({
-        success: false,
-        message: error.message
-      })
+    res.status(400).send({
+      status: 'Error in Get Professionals',
+      data: null,
+      error: {
+        error_message: error
+      }
+    })
   }
 })
 
@@ -53,49 +68,51 @@ router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id
     const professional = await Professionals.getById(id)
-    if (!professional) {
-      throw createError(404, 'Professional not found')
-    }
-    res.json({
-      success: true,
-      message: 'Get one professional',
-      data: { professional }
+    // if (!professional) {
+    //   throw createError(404, 'Professional not found')
+    // }
+    res.status(200).send({
+      status: 'Professional Found',
+      data: professional,
+      error: null
     })
   } catch (error) {
-    res.status(400)
-    res.json({
-      success: false,
-      message: error.message
+    res.status(400).send({
+      status: 'Error in Get Professional by Id',
+      data: null,
+      error: {
+        error_message: error
+      }
     })
   }
 })
 
 // Update one professional
 
-router.patch('/:id', async (req, res) => {
-  try {
-    const id = req.params.id
-    const profesionalsData = req.body
-    const profesionalsFound = await Professionals.getById(id)
-    if (!profesionalsFound) {
-      throw createError(404, 'Professional not found')
-    }
-    const professionalUpdate = await Professionals.updateById(
-      id,
-      profesionalsData
-    )
-    res.json({
-      success: true,
-      message: 'Update one professional',
-      data: { professionalUpdate }
-    })
-  } catch (error) {
-    res.status(400)
-    res.json({
-      success: false,
-      message: error.message
-    })
-  }
-})
+// router.patch('/:id', async (req, res) => {
+//   try {
+//     const id = req.params.id
+//     const profesionalsData = req.body
+//     const profesionalsFound = await Professionals.getById(id)
+//     if (!profesionalsFound) {
+//       throw createError(404, 'Professional not found')
+//     }
+//     const professionalUpdate = await Professionals.updateById(
+//       id,
+//       profesionalsData
+//     )
+//     res.json({
+//       success: true,
+//       message: 'Update one professional',
+//       data: { professionalUpdate }
+//     })
+//   } catch (error) {
+//     res.status(400)
+//     res.json({
+//       success: false,
+//       message: error.message
+//     })
+//   }
+// })
 
 module.exports = router

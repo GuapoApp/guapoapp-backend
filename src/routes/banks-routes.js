@@ -6,10 +6,20 @@ router.get('/:bankCode', async (req, res) => {
   try {
     const bankCode = req.params.bankCode
     const bank = await findByBankCode(bankCode)
-    res.status(201).send({ status: 'OK', data: bank, error: null })
+    res.status(200).send({
+      status: 'Bank Found',
+      data: bank,
+      error: null
+    })
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ status: 'Error', data: null, error: error })
+    // console.log(error)
+    res.status(400).send({
+      status: 'Error in Get Bank by Bank Code',
+      data: null,
+      error: {
+        error_message: error
+      }
+    })
   }
 })
 
