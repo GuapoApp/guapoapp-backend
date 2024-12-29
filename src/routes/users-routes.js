@@ -35,6 +35,7 @@ router.post('/login', async (req, res) => {
         Role: user.Role,
         Profile_Picture: user.Profile_Picture
       })
+
       authorization = `Bearer ${token}`
       res.status(200).send({
         status: 'Correct Login',
@@ -48,7 +49,7 @@ router.post('/login', async (req, res) => {
       status: 'Error in Login',
       data: null,
       error: {
-        message_error: error
+        error_message: error
       }
     })
   }
@@ -174,7 +175,9 @@ router.put('/:id', validUser, async (req, res) => {
     res.status(400).send({
       status: 'Error in Update User',
       data: null,
-      error: error
+      error: {
+        error_message: error
+      }
     })
   }
 })

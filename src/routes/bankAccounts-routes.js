@@ -16,18 +16,34 @@ router.post('/', async (req, res) => {
       error: null
     })
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ status: 'Error', data: null, error: error })
+    // console.log(error)
+    res.status(400).send({
+      status: 'Error',
+      data: null,
+      error: {
+        error_message: error
+      }
+    })
   }
 })
 
 router.get('/', async (req, res) => {
   try {
     const bankAccounts = await findAll()
-    res.status(200).send({ status: 'OK', data: bankAccounts, error: null })
+    res.status(200).send({
+      status: 'Bank Accounts Found',
+      data: bankAccounts,
+      error: null
+    })
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ status: 'Error', data: null, error: error })
+    // console.log(error)
+    res.status(400).send({
+      status: 'Error in Get Bank Accounts',
+      data: null,
+      error: {
+        error_message: error
+      }
+    })
   }
 })
 
@@ -35,10 +51,20 @@ router.get('/:id', async (req, res) => {
   try {
     const bankAccountId = req.params.id
     const bankAccount = await findBankAccount(bankAccountId)
-    res.status(200).send({ status: 'OK', data: bankAccount, error: null })
+    res.status(200).send({
+      status: 'Bank Account Found',
+      data: bankAccount,
+      error: null
+    })
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ status: 'Error', data: null, error: error })
+    // console.log(error)
+    res.status(400).send({
+      status: 'Error in Get Bank Account by Id',
+      data: null,
+      error: {
+        error_message: error
+      }
+    })
   }
 })
 

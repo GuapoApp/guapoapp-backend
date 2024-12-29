@@ -2,7 +2,7 @@ const Sessions = require('../models/sessions-models')
 
 // Create sessions
 
-async function create(data) {
+async function createSession(data) {
   try {
     const newSessions = await Sessions.create(data)
     return newSessions
@@ -42,7 +42,7 @@ async function updateById(id, newData) {
 }
 
 module.exports = {
-  create,
+  createSession,
   getAll,
   getById,
   updateById

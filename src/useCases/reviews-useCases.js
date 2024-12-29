@@ -1,7 +1,7 @@
 const Reviews = require('../models/reviews-models')
 // Create Reviews
 
-async function create(data) {
+async function createReview(data) {
   try {
     const newReviews = await Reviews.create(data)
     return newReviews
@@ -41,7 +41,7 @@ async function updateById(id, newData) {
 }
 
 module.exports = {
-  create,
+  createReview,
   getAll,
   getById,
   updateById
