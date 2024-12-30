@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { validUser } = require('../middlewares/userAuth')
+const { validUser, validAdminUser } = require('../middlewares/userAuth')
 const {
   createConsultant,
   findAll,
   findConsultant
 } = require('../useCases/consultants-useCases')
+const jwt = require('jsonwebtoken')
 
 router.post('/', async (req, res) => {
   try {
@@ -39,7 +40,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
+router.get('/', validAdminUser, async (req, res) => {
   try {
     const consultants = await findAll()
     res.status(200).send({
@@ -60,8 +61,26 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', validUser, async (req, res) => {
   try {
+    const { authorization } = req.headers
     const consultantId = req.params.id
+    const decoded = jwt.verify(
+      authorization.split(' ')[1],
+      process.env.JWT_SIGN
+    )
+    const userId = decoded._id
+
     const consultant = await findConsultant(consultantId)
+
+    if (consultant.User._id.toString() !== userId) {
+      res.status(403).send({
+        status: 'Forbidden User',
+        data: null,
+        error: null
+      })
+
+      return
+    }
+
     res.status(200).send({
       status: 'OK',
       data: consultant,
