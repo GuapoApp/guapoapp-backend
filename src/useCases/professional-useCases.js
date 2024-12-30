@@ -27,11 +27,12 @@ async function getAll() {
 }
 // Get professional by id
 async function getById(id) {
+  console.log('Received Id:', id)
   try {
-    const idProfessional = await Professional.findById(id)
-      .populate('User')
-      .exec()
-    return idProfessional
+    const professional = await Professional.findById(id).populate('User').exec()
+
+    console.log('Professional Found:', professional)
+    return professional
   } catch (error) {
     throw error
   }
