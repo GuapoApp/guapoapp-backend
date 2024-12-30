@@ -7,32 +7,45 @@ const sessionsSchema = new mongoose.Schema({
   },
   Transcript: {
     type: String,
-    required: true
+    required: false
   },
   Status: {
-    type: Array,
-    required: true
-
+    type: String,
+    required: true,
+    enum: [
+      // 'Pending Confirmation',
+      'Scheduled',
+      'Cancelled',
+      'Completed'
+    ]
   },
   Paid: {
-    type: Boolean,
+    type: Boolean
   },
-    Professional: {
-      type: mongoose.Types.ObjectId,
-      ref: 'Users',
-      required: false
-    },
-    Consultant: {
-      type: mongoose.Types.ObjectId,
-      ref: 'Users',
-      required: false
-    },
-    
-  })
-  
-  
+  Professional: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Professionals',
+    required: true
+  },
+  Consultant: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Consultants',
+    required: true
+  },
+  Consultancy_Type: {
+    type: String,
+    required: true,
+    enum: ['Integral', 'Event']
+  },
+  About: {
+    type: String,
+    required: false
+  }
+  // Event: {
+  //   type: String,
+  //   required: false
+  // }
+})
 
- 
-
-  const sessionsModel = mongoose.model('Sessions', sessionsSchema)
-  module.exports=sessionsModel
+const sessionsModel = mongoose.model('Sessions', sessionsSchema)
+module.exports = sessionsModel

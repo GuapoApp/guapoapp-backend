@@ -4,9 +4,11 @@ const {
   getById,
   updateById
 } = require('../useCases/sessions-useCases')
+const { validUser, validAdminUser } = require('../middlewares/userAuth')
 const createError = require('http-errors')
 const express = require('express')
 const router = express.Router()
+const jwt = require('jsonwebtoken')
 
 // -----------> CRUD operations<-----------
 
@@ -35,9 +37,9 @@ router.post('/', async (req, res) => {
 
 // Get all sessions
 
-router.get('/', async (req, res) => {
+router.get('/', validAdminUser, async (req, res) => {
   try {
-    const sessions = await Sessionss.getAll({})
+    const sessions = await getAll({})
     res.status(200).send({
       status: 'Sessions Found',
       data: sessions,
@@ -56,10 +58,31 @@ router.get('/', async (req, res) => {
 
 // Get one sessions
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validUser, async (req, res) => {
   try {
     const id = req.params.id
+    const { authorization } = req.headers
+    const decoded = jwt.verify(
+      authorization.split(' ')[1],
+      process.env.JWT_SIGN
+    )
+    const userId = decoded._id
+
     const session = await getById(id)
+
+    if (
+      session.Professional.User._id.toString() !== userId &&
+      session.Consultant.User._id.toString() !== userId
+    ) {
+      res.status(403).send({
+        status: 'Forbidden User',
+        data: null,
+        error: null
+      })
+
+      return
+    }
+
     // if (!sessions) {
     //   throw createError(404, 'Sessions not found')
     // }

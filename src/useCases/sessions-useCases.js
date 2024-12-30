@@ -1,3 +1,4 @@
+const { model } = require('mongoose')
 const Sessions = require('../models/sessions-models')
 
 // Create sessions
@@ -14,6 +15,15 @@ async function createSession(data) {
 async function getAll() {
   try {
     const allSessions = await Sessions.find()
+      .populate({
+        path: 'Professional',
+        populate: 'User'
+      })
+      .populate({
+        path: 'Consultant',
+        populate: 'User'
+      })
+      .exec()
     return allSessions
   } catch (error) {
     throw error
@@ -23,6 +33,15 @@ async function getAll() {
 async function getById(id) {
   try {
     const idSessions = await Sessions.findById(id)
+      .populate({
+        path: 'Professional',
+        populate: 'User'
+      })
+      .populate({
+        path: 'Consultant',
+        populate: 'User'
+      })
+      .exec()
     return idSessions
   } catch (error) {
     throw error

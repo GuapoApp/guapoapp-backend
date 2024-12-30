@@ -1,4 +1,10 @@
-const Professionals = require('../useCases/professional-useCases')
+const {
+  create,
+  getAll,
+  getById,
+  getProfessionalSessions,
+  updateById
+} = require('../useCases/professional-useCases')
 const { validUser, validAdminUser } = require('../middlewares/userAuth')
 
 const createError = require('http-errors')
@@ -6,13 +12,14 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 
-// -----------> CRUD operations<-----------
-
+/**
+ * POST
+ */
 // Create new professional
 router.post('/', async (req, res) => {
   try {
     const professionalData = req.body
-    const newProfessional = await Professionals.create(professionalData)
+    const newProfessional = await create(professionalData)
     await newProfessional.save()
 
     res.status(201).send({
@@ -43,10 +50,13 @@ router.post('/', async (req, res) => {
   }
 })
 
+/**
+ * GET
+ */
 // Get all professionals
 router.get('/', validAdminUser, async (req, res) => {
   try {
-    const professionals = await Professionals.getAll({})
+    const professionals = await getAll({})
     res.status(200).send({
       status: 'Professionals Found',
       data: {
@@ -76,7 +86,7 @@ router.get('/:id', validUser, async (req, res) => {
     )
     const userId = decoded._id
 
-    const professional = await Professionals.getById(professionalId)
+    const professional = await getById(professionalId)
     // if (!professional) {
     //   throw createError(404, 'Professional not found')
     // }
@@ -97,7 +107,7 @@ router.get('/:id', validUser, async (req, res) => {
       error: null
     })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(400).send({
       status: 'Error in Get Professional by Id',
       data: null,
@@ -108,13 +118,39 @@ router.get('/:id', validUser, async (req, res) => {
   }
 })
 
+// Get professional sessions
+
+router.get('/sessions/:id', validUser, async (req, res) => {
+  try {
+    const sessions = await getProfessionalSessions(req.params.id)
+
+    res.status(200).send({
+      status: 'Professional Sessions Found',
+      data: sessions,
+      error: null
+    })
+  } catch (error) {
+    // console.log('Error in Get Professional Sessions:', error)
+    res.status(400).send({
+      status: 'Error in Get Professional Sessions',
+      data: null,
+      error: {
+        error_message: error
+      }
+    })
+  }
+})
+
+/**
+ * UPDATE
+ */
 // Update one professional
 
 // router.patch('/:id', async (req, res) => {
 //   try {
 //     const id = req.params.id
 //     const profesionalsData = req.body
-//     const profesionalsFound = await Professionals.getById(id)
+//     const profesionalsFound = await getById(id)
 //     if (!profesionalsFound) {
 //       throw createError(404, 'Professional not found')
 //     }
