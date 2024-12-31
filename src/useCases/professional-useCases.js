@@ -1,4 +1,5 @@
 const Professional = require('../models/profesionals-models')
+const Session = require('../models/sessions-models')
 const { createUser } = require('./users-useCases')
 const mongoose = require('mongoose')
 
@@ -27,11 +28,11 @@ async function getAll() {
 }
 // Get professional by id
 async function getById(id) {
+  // console.log('Received Id:', id)
   try {
-    const idProfessional = await Professional.findById(id)
-      .populate('User')
-      .exec()
-    return idProfessional
+    const professional = await Professional.findById(id).populate('User').exec()
+
+    return professional
   } catch (error) {
     throw error
   }
@@ -47,6 +48,23 @@ const getProfessionalId = async (userId) => {
     throw error
   }
 }
+
+// Get Professional Sessions
+const getProfessionalSessions = async (professionalId) => {
+  try {
+    const sessions = await Session.find({ Professional: professionalId })
+      .populate({
+        path: 'Consultant',
+        populate: 'User'
+      })
+      .exec()
+    return sessions
+  } catch (error) {
+    // console.log('Error in getProfessionalSessions:', error)
+    throw error
+  }
+}
+
 // Update professional
 
 async function updateById(id, newData) {
@@ -67,5 +85,6 @@ module.exports = {
   getAll,
   getById,
   getProfessionalId,
+  getProfessionalSessions,
   updateById
 }

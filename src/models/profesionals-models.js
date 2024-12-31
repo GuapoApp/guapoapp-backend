@@ -12,5 +12,6 @@ const professionalSchema = new mongoose.Schema({
   }
 })
 
-const professionalModel = mongoose.model('Professional', professionalSchema)
+const professionalModel = mongoose.model('Professionals', professionalSchema)
+
 module.exports = professionalModel
