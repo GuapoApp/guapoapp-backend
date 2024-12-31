@@ -3,6 +3,7 @@ const {
   getAll,
   getById,
   getProfessionalSessions,
+  getProfessionalId,
   updateById
 } = require('../useCases/professional-useCases')
 const { validUser, validAdminUser } = require('../middlewares/userAuth')
@@ -122,7 +123,21 @@ router.get('/:id', validUser, async (req, res) => {
 
 router.get('/sessions/:id', validUser, async (req, res) => {
   try {
-    const sessions = await getProfessionalSessions(req.params.id)
+    console.log('Requested Professional Sessions:', req.params.id)
+    const professionalId = await getProfessionalId(req.params.id)
+    const sessions = await getProfessionalSessions(professionalId)
+
+    if (!sessions) {
+      // throw createError(404, 'Professional Sessions not found')
+      res.status(404).send({
+        status: 'Professional Sessions Not Found',
+        data: null,
+        error: null
+      })
+      return
+    }
+
+    console.log('Sessions:', sessions)
 
     res.status(200).send({
       status: 'Professional Sessions Found',
@@ -130,7 +145,6 @@ router.get('/sessions/:id', validUser, async (req, res) => {
       error: null
     })
   } catch (error) {
-    // console.log('Error in Get Professional Sessions:', error)
     res.status(400).send({
       status: 'Error in Get Professional Sessions',
       data: null,
