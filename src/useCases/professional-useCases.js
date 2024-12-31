@@ -50,9 +50,14 @@ const getProfessionalId = async (userId) => {
 }
 
 // Get Professional Sessions
-const getProfessionalSessions = async (professionalId) => {
+const getProfessionalSessions = async (professionalId, count, status) => {
   try {
-    const sessions = await Session.find({ Professional: professionalId })
+    const sessions = await Session.find({
+      Professional: professionalId,
+      Status: status
+    })
+      .sort({ Date: 1 })
+      .limit(parseInt(count))
       .populate({
         path: 'Consultant',
         populate: 'User'
