@@ -29,8 +29,6 @@ router.post('/', async (req, res) => {
       error: null
     })
   } catch (error) {
-    // console.log('Error ==>', error.errors?.Birth_Date.properties.type)
-
     let errorInfo = error
 
     // Duplicate Email Error
@@ -123,8 +121,6 @@ router.get('/:id', validUser, async (req, res) => {
 
 router.get('/sessions/:id', validUser, async (req, res) => {
   try {
-    // console.log('Requested Professional Sessions:', req.params.id)
-    console.log('Requested Professional Sessions:', req.query.count)
     const professionalId = await getProfessionalId(req.params.id)
     const sessions = await getProfessionalSessions(
       professionalId,

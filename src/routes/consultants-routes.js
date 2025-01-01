@@ -4,7 +4,8 @@ const { validUser, validAdminUser } = require('../middlewares/userAuth')
 const {
   createConsultant,
   findAll,
-  findConsultant
+  findConsultant,
+  getAvailableConsultants
 } = require('../useCases/consultants-useCases')
 const jwt = require('jsonwebtoken')
 
@@ -18,8 +19,6 @@ router.post('/', async (req, res) => {
       error: null
     })
   } catch (error) {
-    // console.log('Error ==>', error.errors?.Birth_Date.properties.type)
-
     let errorInfo = error
 
     // Duplicate Email Error
@@ -59,6 +58,39 @@ router.get('/', validAdminUser, async (req, res) => {
   }
 })
 
+router.get('/availability', validUser, async (req, res) => {
+  try {
+    const availableConsultants = await getAvailableConsultants(
+      req.query.date,
+      req.query.hour
+    )
+
+    if (availableConsultants.length === 0) {
+      res.status(404).send({
+        status: 'No Consultants Available',
+        data: null,
+        error: null
+      })
+      return
+    }
+
+    res.status(200).send({
+      status: 'Available Consultants Found',
+      data: availableConsultants,
+      error: null
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({
+      status: 'Error in Get Available Consultants',
+      data: null,
+      error: {
+        error_message: error
+      }
+    })
+  }
+})
+
 router.get('/:id', validUser, async (req, res) => {
   try {
     const { authorization } = req.headers
@@ -82,12 +114,11 @@ router.get('/:id', validUser, async (req, res) => {
     }
 
     res.status(200).send({
-      status: 'OK',
+      status: 'Consultant Found',
       data: consultant,
       error: null
     })
   } catch (error) {
-    // console.log(error)
     res.status(400).send({
       status: 'Error in Get Consultant by Id',
       data: null,
