@@ -29,8 +29,6 @@ router.post('/', async (req, res) => {
       error: null
     })
   } catch (error) {
-    // console.log('Error ==>', error.errors?.Birth_Date.properties.type)
-
     let errorInfo = error
 
     // Duplicate Email Error
@@ -123,9 +121,12 @@ router.get('/:id', validUser, async (req, res) => {
 
 router.get('/sessions/:id', validUser, async (req, res) => {
   try {
-    console.log('Requested Professional Sessions:', req.params.id)
     const professionalId = await getProfessionalId(req.params.id)
-    const sessions = await getProfessionalSessions(professionalId)
+    const sessions = await getProfessionalSessions(
+      professionalId,
+      req.query.count,
+      req.query.status
+    )
 
     if (!sessions) {
       // throw createError(404, 'Professional Sessions not found')
@@ -137,7 +138,7 @@ router.get('/sessions/:id', validUser, async (req, res) => {
       return
     }
 
-    console.log('Sessions:', sessions)
+    // console.log('Sessions:', sessions)
 
     res.status(200).send({
       status: 'Professional Sessions Found',
