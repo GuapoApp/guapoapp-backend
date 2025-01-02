@@ -72,14 +72,13 @@ const getAvailableConsultants = async (scheduledDate, startHour) => {
     )
 
     if (filteredConsultants.length === 0) {
-      console.log('Available Consultants:', filteredConsultants)
       return availableConsultants
     }
 
     availableConsultants = await Consultants.find({
       _id: { $in: filteredConsultants }
     })
-      .populate({ path: 'User', select: 'Name ProfilePicture' })
+      .populate({ path: 'User', select: 'Name Profile_Picture' })
       .exec()
 
     return availableConsultants
@@ -95,7 +94,6 @@ const updateConsultant = async (id, data) => {
     })
     return updatedConsultant
   } catch (error) {
-    // console.log(error)
     throw error
   }
 }
